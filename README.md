@@ -2,7 +2,7 @@
 
 ![example](assets/dutch_flag.webp)
 
-This is the README for your extension "anyscript". This extension helps you avoid using `any` as a type in TypeScript by providing warnings and playing an alert sound.
+This is the README for your extension "anyscript detector". This extension helps you avoid using `any` as a type in TypeScript by providing warnings and playing an alert sound.
 
 ## Features
 
@@ -36,19 +36,7 @@ Users appreciate release notes as you update your extension.
 
 ### 1.0.0
 
-Initial release of anyscript.
-
-### 1.0.1
-
-Fixed minor bugs and improved performance.
-
-### 1.1.0
-
-Added features:
-- Custom alert sound setting.
-- Improved detection of `any` type.
-
----
+Initial release of anyscript detector.
 
 ## Following extension guidelines
 
