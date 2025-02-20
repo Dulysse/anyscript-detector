@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as sound from 'sound-play';
 
-const WELCOME_MESSAGE = '🪖 Willkommen in Deutschland! 🪖'.toLocaleUpperCase();
-const ERROR_MESSAGE = '⚠️ ACHTUNG! Ich werde Sie nicht in AnyScript programmieren lassen! Vermeiden Sie die Verwendung von "any" als Typ! ⚠️'.toLocaleUpperCase();
+export const WELCOME_MESSAGE = '🪖 Willkommen in Deutschland! 🪖'.toLocaleUpperCase();
+export const ERROR_MESSAGE = '⚠️ ACHTUNG! Ich werde Sie nicht in AnyScript programmieren lassen! Vermeiden Sie die Verwendung von "any" als Typ! ⚠️'.toLocaleUpperCase();
 let detectedPositions = new Set<string>();
 let decorationType: vscode.TextEditorDecorationType | null = null;
 
