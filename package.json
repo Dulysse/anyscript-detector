@@ -1,8 +1,14 @@
 {
   "name": "anyscript-detector",
+  "publisher": "AnyScriptDetector",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dulysse/anyscript-detector"
+  },
   "displayName": "AnyScript Detector",
   "description": "I won't let you code in AnyScript under threat of reprisals",
-  "version": "0.0.1",
+  "icon": "assets/icon.webp",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.97.0"
   },
