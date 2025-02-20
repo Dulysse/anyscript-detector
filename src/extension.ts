@@ -2,20 +2,20 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as sound from 'sound-play';
 
-const WELCOME_MESSAGE = '🪖 Willkommen in Deutschland! 🪖';
-const ERROR_MESSAGE = '⚠️ ACHTUNG! Ich werde Sie nicht in AnyScript programmieren lassen! Vermeiden Sie die Verwendung von "any" als Typ! ⚠️';
+const WELCOME_MESSAGE = '🪖 Willkommen in Deutschland! 🪖'.toLocaleUpperCase();
+const ERROR_MESSAGE = '⚠️ ACHTUNG! Ich werde Sie nicht in AnyScript programmieren lassen! Vermeiden Sie die Verwendung von "any" als Typ! ⚠️'.toLocaleUpperCase();
 let detectedPositions = new Set<string>();
 let decorationType: vscode.TextEditorDecorationType | null = null;
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-    const welcom = () => vscode.window.showWarningMessage(WELCOME_MESSAGE);
+    const welcome = () => vscode.window.showInformationMessage(WELCOME_MESSAGE);
 
-    welcom();
+    welcome();
 
     // Register a command that is invoked when the extension is activated
-    const disposable = vscode.commands.registerCommand('anyscript.helloWorld', welcom);
+    const disposable = vscode.commands.registerCommand('anyscript.helloWorld', welcome);
 
     context.subscriptions.push(disposable);
 
@@ -104,8 +104,8 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         decorationType = vscode.window.createTextEditorDecorationType({
-            backgroundColor: 'rgba(255, 0, 0, 0.3)', // Light red background
-            border: '1px solid red'
+            backgroundColor: 'rgba(255, 0, 0, 0.4)', // Light red background
+            border: '2px solid red'
         });
 
         // Clear previous decorations

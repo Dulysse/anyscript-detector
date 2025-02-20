@@ -1,35 +1,34 @@
-# anyscript README
+# 🪖 Anyscript Detector 🪖
 
-This is the README for your extension "anyscript". After writing up a brief description, we recommend including the following sections.
+![example](assets/dutch_flag.webp)
+
+This is the README for your extension "anyscript". This extension helps you avoid using `any` as a type in TypeScript by providing warnings and playing an alert sound.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Detects the usage of `any` type in your TypeScript files.
+- Highlights the `any` type with a red background and border.
+- Plays an alert sound whenever `any` is detected.
+- Provides a custom webview panel with additional information and images.
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### Example Screenshot
+![example](assets/Screenshot_1.png)
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- Node.js, npm and Typescript
+- Visual Studio Code
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+* `anyscript.enable`: Enable/disable this extension.
+* `anyscript.alertSound`: Set the path to a custom alert sound file.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- No known issues at the moment.
 
 ## Release Notes
 
@@ -37,15 +36,17 @@ Users appreciate release notes as you update your extension.
 
 ### 1.0.0
 
-Initial release of ...
+Initial release of anyscript.
 
 ### 1.0.1
 
-Fixed issue #.
+Fixed minor bugs and improved performance.
 
 ### 1.1.0
 
-Added features X, Y, and Z.
+Added features:
+- Custom alert sound setting.
+- Improved detection of `any` type.
 
 ---
 
@@ -69,3 +70,5 @@ You can author your README using Visual Studio Code. Here are some useful editor
 * [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
 
 **Enjoy!**
+
+![example](assets/german_soldier.webp)
