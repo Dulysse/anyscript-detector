@@ -1,6 +1,6 @@
 # 🪖 Anyscript Detector 🪖
 
-![example](assets/dutch_flag.webp)
+![example](https://raw.githubusercontent.com/Dulysse/anyscript-detector/refs/heads/main/assets/dutch_flag.webp)
 
 This is the README for your extension "anyscript detector". This extension helps you avoid using `any` as a type in TypeScript by providing warnings and playing an alert sound.
 
@@ -12,7 +12,7 @@ This is the README for your extension "anyscript detector". This extension helps
 - Provides a custom webview panel with additional information and images.
 
 ### Example Screenshot
-![example](assets/Screenshot_1.png)
+![example](https://raw.githubusercontent.com/Dulysse/anyscript-detector/refs/heads/main/assets/Screenshot_1.png)
 
 ## Requirements
 
@@ -59,4 +59,4 @@ You can author your README using Visual Studio Code. Here are some useful editor
 
 **Enjoy!**
 
-![example](assets/german_soldier.webp)
+![example](https://raw.githubusercontent.com/Dulysse/anyscript-detector/refs/heads/main/assets/german_soldier.webp)
