@@ -23,7 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(collection);
 
     vscode.workspace.textDocuments.forEach(document => {
-        if (document.languageId === 'typescript') {
+        if (document.fileName.includes(".ts")) {
             updateDiagnostics(document, collection);
         }
     });
@@ -40,44 +40,51 @@ export function activate(context: vscode.ExtensionContext) {
     // Analyze the file when it's changed
     const onDidChangeTextDocumentDisposable = vscode.workspace.onDidChangeTextDocument(event => {
         const document = event.document;
-        if (document.languageId === 'typescript') {
+        if (document.fileName.includes(".ts")) {
             updateDiagnostics(document, collection);
         }
     });
 
     context.subscriptions.push(onDidChangeTextDocumentDisposable);
-
+    
     function updateDiagnostics(document: vscode.TextDocument, collection: vscode.DiagnosticCollection): void {
         const diagnostics: vscode.Diagnostic[] = [];
         const text = document.getText();
         const regex = /\bany\b/g;
         const decorations: { range: vscode.Range, hoverMessage: vscode.MarkdownString }[] = [];
         const newDetectedPositions = new Set<string>();
-
+    
         let match;
         while ((match = regex.exec(text)) !== null) {
             const startPosition = document.positionAt(match.index);
             const endPosition = document.positionAt(match.index + match[0].length);
             const range = new vscode.Range(startPosition, endPosition);
             const positionKey = `${startPosition.line}:${startPosition.character}`;
-
+    
             // Ensure we are only capturing "any" used as a type
             const lineText = document.lineAt(startPosition.line).text;
-            const typeRegex = new RegExp(`\\bany\\b(?=\\s*[:;=])`);
-            if (!typeRegex.test(lineText)) {continue;}
-
+            const beforeAny = lineText.slice(0, startPosition.character).slice(-1);
+            const afterAny = lineText.slice(startPosition.character + match[0].length)[0];
+    
+            const beforeAnyPattern = /(\s|<|\[)$/; // Matches space character, "<", or "[" indicating a type annotation or generic type
+            const afterAnyPattern = /^(>|,|\)|\||\}|\=|\]|\s|;)/; // Matches characters that indicate the end of a type annotation or generic type, including whitespace and ";"
+    
+            if (!beforeAnyPattern.test(beforeAny) || !afterAnyPattern.test(afterAny)) {
+                continue;
+            }
+    
             const diagnostic = new vscode.Diagnostic(
                 range,
                 ERROR_MESSAGE,
                 vscode.DiagnosticSeverity.Error
             );
             diagnostics.push(diagnostic);
-
+    
             decorations.push({
                 range,
                 hoverMessage: new vscode.MarkdownString(ERROR_MESSAGE)
             });
-
+    
             if (!detectedPositions.has(positionKey)) {
                 const audioFilePath = path.join(context.extensionUri.fsPath, 'assets', 'audio.mp3');
                 sound.play(audioFilePath).catch(err => {
@@ -86,11 +93,11 @@ export function activate(context: vscode.ExtensionContext) {
             }
             newDetectedPositions.add(positionKey);
         }
-
+    
         detectedPositions = newDetectedPositions;
-
+    
         collection.set(document.uri, diagnostics);
-
+    
         const editor = vscode.window.activeTextEditor;
         if (editor && editor.document === document) {
             applyDecorations(editor, decorations);
