@@ -4,8 +4,10 @@ import * as sound from 'sound-play';
 
 export const WELCOME_MESSAGE = '🪖 Willkommen in Deutschland! 🪖'.toLocaleUpperCase();
 export const ERROR_MESSAGE = '⚠️ ACHTUNG! Ich werde Sie nicht in AnyScript programmieren lassen! Vermeiden Sie die Verwendung von "any" als Typ! ⚠️'.toLocaleUpperCase();
+export const SUCCESS_MESSAGE = '🎉 Herzlichen Glückwunsch! Sie haben alle "any"-Typen entfernt! 🎉'.toLocaleUpperCase();
 let detectedPositions = new Set<string>();
 let decorationType: vscode.TextEditorDecorationType | null = null;
+let previousAnyCount = 0;
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -53,9 +55,11 @@ export function activate(context: vscode.ExtensionContext) {
         const regex = /\bany\b/g;
         const decorations: { range: vscode.Range, hoverMessage: vscode.MarkdownString }[] = [];
         const newDetectedPositions = new Set<string>();
+        let currentAnyCount = 0;
     
         let match;
         while ((match = regex.exec(text)) !== null) {
+            currentAnyCount++;
             const startPosition = document.positionAt(match.index);
             const endPosition = document.positionAt(match.index + match[0].length);
             const range = new vscode.Range(startPosition, endPosition);
@@ -102,6 +106,16 @@ export function activate(context: vscode.ExtensionContext) {
         if (editor && editor.document === document) {
             applyDecorations(editor, decorations);
         }
+
+        if (previousAnyCount > 0 && currentAnyCount === 0) {
+            vscode.window.showInformationMessage(SUCCESS_MESSAGE);
+            const victoryAudioFilePath = path.join(context.extensionUri.fsPath, 'assets', 'victory.mp3');
+            sound.play(victoryAudioFilePath).catch(err => {
+                console.error('Error playing victory audio:', err);
+            });
+        }
+
+        previousAnyCount = currentAnyCount;
     }
 
     function applyDecorations(editor: vscode.TextEditor, decorations: { range: vscode.Range, hoverMessage: vscode.MarkdownString }[]) {
