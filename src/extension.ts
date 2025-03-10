@@ -8,6 +8,7 @@ export const SUCCESS_MESSAGE = '🎉 Herzlichen Glückwunsch! Sie haben alle "an
 let detectedPositions = new Set<string>();
 let decorationType: vscode.TextEditorDecorationType | null = null;
 let previousAnyCount = 0;
+const IGNORED_PATHS = ["node_modules", "dist", "out", "build", "www"];
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -24,15 +25,19 @@ export function activate(context: vscode.ExtensionContext) {
     const collection = vscode.languages.createDiagnosticCollection('anyscript');
     context.subscriptions.push(collection);
 
+    const isIngnoredFile = (path: string) => {
+        return IGNORED_PATHS.some(i => path.includes(i));
+    };
+
     vscode.workspace.textDocuments.forEach(document => {
-        if (document.fileName.includes(".ts")) {
+        if (document.fileName.includes(".ts") && !isIngnoredFile(document.fileName)) {
             updateDiagnostics(document, collection);
         }
     });
 
     // Analyze the file when it's opened
     const onDidOpenTextDocumentDisposable = vscode.workspace.onDidOpenTextDocument(document => {
-        if (document.fileName.includes(".ts")) {
+        if (document.fileName.includes(".ts") && !isIngnoredFile(document.fileName)) {
             updateDiagnostics(document, collection);
         }
     });
@@ -42,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
     // Analyze the file when it's changed
     const onDidChangeTextDocumentDisposable = vscode.workspace.onDidChangeTextDocument(event => {
         const document = event.document;
-        if (document.fileName.includes(".ts")) {
+        if (document.fileName.includes(".ts") && !isIngnoredFile(document.fileName)) {
             updateDiagnostics(document, collection);
         }
     });
@@ -52,7 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
     function updateDiagnostics(document: vscode.TextDocument, collection: vscode.DiagnosticCollection): void {
         const diagnostics: vscode.Diagnostic[] = [];
         const text = document.getText();
-        const regex = /\bany\b/g;
+        const regex = /\b(?<!\/\/.*|\/\*.*|\*.*|\s)any\b/g;
         const decorations: { range: vscode.Range, hoverMessage: vscode.MarkdownString }[] = [];
         const newDetectedPositions = new Set<string>();
         let currentAnyCount = 0;
