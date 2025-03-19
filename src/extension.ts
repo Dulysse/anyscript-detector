@@ -53,15 +53,24 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(onDidChangeTextDocumentDisposable);
+
+
+    function isCommentLine(line: string): boolean {
+        const trimmedLine = line.trim();
+        return trimmedLine.startsWith('//') || 
+               trimmedLine.startsWith('/**') || 
+               trimmedLine.startsWith('*') || 
+               trimmedLine.startsWith('*/');
+    }
     
     function updateDiagnostics(document: vscode.TextDocument, collection: vscode.DiagnosticCollection): void {
         const diagnostics: vscode.Diagnostic[] = [];
         const text = document.getText();
-        const regex = /\b(?<!\/\/.*|\/\*.*|\*.*|\s)any\b/g;
+        const regex = /\bany\b/g;
         const decorations: { range: vscode.Range, hoverMessage: vscode.MarkdownString }[] = [];
         const newDetectedPositions = new Set<string>();
         let currentAnyCount = 0;
-    
+
         let match;
         while ((match = regex.exec(text)) !== null) {
             currentAnyCount++;
@@ -78,7 +87,7 @@ export function activate(context: vscode.ExtensionContext) {
             const beforeAnyPattern = /(\s|<|\[)$/; // Matches space character, "<", or "[" indicating a type annotation or generic type
             const afterAnyPattern = /^(>|,|\)|\||\}|\=|\]|\s|;)/; // Matches characters that indicate the end of a type annotation or generic type, including whitespace and ";"
     
-            if (!beforeAnyPattern.test(beforeAny) || !afterAnyPattern.test(afterAny)) {
+            if (!beforeAnyPattern.test(beforeAny) || !afterAnyPattern.test(afterAny) || isCommentLine(lineText)) {
                 continue;
             }
     
